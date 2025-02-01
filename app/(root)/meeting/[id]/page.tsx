@@ -12,9 +12,17 @@ import { useState } from "react";
 function MeetingPage() {
   const { id } = useParams();
   const { isLoaded } = useUser();
-  const { call, isCallLoading } = useGetCallById(id);
+
+  const { call, isCallLoading } = useGetCallById(id as string);
 
   const [isSetupComplete, setIsSetupComplete] = useState(false);
+  if (!id) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-2xl font-semibold">Error: Invalid meeting ID</p>
+      </div>
+    );
+  }
 
   if (!isLoaded || isCallLoading) return <LoaderUI />;
 

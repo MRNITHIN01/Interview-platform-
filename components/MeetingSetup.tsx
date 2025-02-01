@@ -11,22 +11,33 @@ function MeetingSetup({ onSetupComplete }: { onSetupComplete: () => void }) {
 
   const call = useCall();
 
-  if (!call) return null;
-
+  // Avoid calling hooks conditionally by always checking if `call` is ready.
   useEffect(() => {
+    if (!call) return; // No-op if call is not available
+
     if (isCameraDisabled) call.camera.disable();
     else call.camera.enable();
-  }, [isCameraDisabled, call.camera]);
+  }, [isCameraDisabled, call]);
 
   useEffect(() => {
+    if (!call) return; // No-op if call is not available
+
     if (isMicDisabled) call.microphone.disable();
     else call.microphone.enable();
-  }, [isMicDisabled, call.microphone]);
+  }, [isMicDisabled, call]);
 
   const handleJoin = async () => {
-    await call.join();
-    onSetupComplete();
+    if (call) {
+      await call.join();
+      onSetupComplete();
+    }
   };
+
+  if (!call) {
+    return (
+      <div>Loading...</div> // Display some loading UI or message when `call` is not ready
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-background/95">
@@ -48,10 +59,9 @@ function MeetingSetup({ onSetupComplete }: { onSetupComplete: () => void }) {
           </Card>
 
           {/* CARD CONTROLS */}
-
           <Card className="md:col-span-1 p-6">
             <div className="h-full flex flex-col">
-              {/* MEETING DETAILS  */}
+              {/* MEETING DETAILS */}
               <div>
                 <h2 className="text-xl font-semibold mb-1">Meeting Details</h2>
                 <p className="text-sm text-muted-foreground break-all">{call.id}</p>
@@ -129,4 +139,5 @@ function MeetingSetup({ onSetupComplete }: { onSetupComplete: () => void }) {
     </div>
   );
 }
+
 export default MeetingSetup;

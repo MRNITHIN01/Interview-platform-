@@ -10,10 +10,17 @@ export function cn(...inputs: ClassValue[]) {
 type Interview = Doc<"interviews">;
 type User = Doc<"users">;
 
-export const groupInterviews = (interviews: Interview[]) => {
-  if (!interviews) return {};
+type InterviewStatusGrouped = {
+  succeeded: Interview[];
+  failed: Interview[];
+  completed: Interview[];
+  upcoming: Interview[];
+};
 
-  return interviews.reduce((acc: any, interview: Interview) => {
+export const groupInterviews = (interviews: Interview[]): InterviewStatusGrouped => {
+  if (!interviews) return { succeeded: [], failed: [], completed: [], upcoming: [] };
+
+  return interviews.reduce((acc: InterviewStatusGrouped, interview: Interview) => {
     const date = new Date(interview.startTime);
     const now = new Date();
 
@@ -28,7 +35,7 @@ export const groupInterviews = (interviews: Interview[]) => {
     }
 
     return acc;
-  }, {});
+  }, { succeeded: [], failed: [], completed: [], upcoming: [] });
 };
 
 export const getCandidateInfo = (users: User[], candidateId: string) => {

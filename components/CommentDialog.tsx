@@ -1,3 +1,5 @@
+"use client";  // <-- Make sure to add this directive to mark the component as client-side
+
 import { useState } from "react";
 import { Id } from "../convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
@@ -31,10 +33,12 @@ function CommentDialog({ interviewId }: CommentDialogProps) {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState("3");
 
+  // Mutations and Queries
   const addComment = useMutation(api.comments.addComment);
   const users = useQuery(api.users.getUsers);
   const existingComments = useQuery(api.comments.getComments, { interviewId });
 
+  // Handle comment submission
   const handleSubmit = async () => {
     if (!comment.trim()) return toast.error("Please enter a comment");
 
@@ -49,11 +53,12 @@ function CommentDialog({ interviewId }: CommentDialogProps) {
       setComment("");
       setRating("3");
       setIsOpen(false);
-    } catch (error) {
+    } catch {
       toast.error("Failed to submit comment");
     }
   };
 
+  // Render stars based on rating
   const renderStars = (rating: number) => (
     <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map((starValue) => (

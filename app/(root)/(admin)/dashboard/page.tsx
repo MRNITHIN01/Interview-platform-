@@ -23,12 +23,15 @@ function DashboardPage() {
   const interviews = useQuery(api.interviews.getAllInterviews);
   const updateStatus = useMutation(api.interviews.updateInterviewStatus);
   console.log(users);
+
   const handleStatusUpdate = async (interviewId: Id<"interviews">, status: string) => {
     try {
       await updateStatus({ id: interviewId, status });
       toast.success(`Interview marked as ${status}`);
     } catch (error) {
       toast.error("Failed to update status");
+      // Optionally, log the error if needed
+      console.error(error); 
     }
   };
 
@@ -61,7 +64,7 @@ function DashboardPage() {
                     const startTime = new Date(interview.startTime);
 
                     return (
-                      <Card className="hover:shadow-md transition-all">
+                      <Card key={interview._id} className="hover:shadow-md transition-all">
                         {/* CANDIDATE INFO */}
                         <CardHeader className="p-4">
                           <div className="flex items-center gap-3">
