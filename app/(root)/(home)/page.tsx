@@ -12,7 +12,7 @@ import LoaderUI from "@/components/LoaderUI";
 import { Loader2Icon } from "lucide-react";
 import MeetingCard from "@/components/MeetingCard";
 
-export default function Home() {
+export default function Home() { 
   const router = useRouter();
   const { isLoading, isInterviewer, } = useUserRole();
   const interviews = useQuery(api.interviews.getMyInterviews);
@@ -102,8 +102,6 @@ export default function Home() {
             </div>
           </>
         )}
-
-        {/* Scrolling Footer */}
         <footer className="fixed bottom-0 left-0 w-full bg-gradient-to-r from-teal-500 via-emerald-600 to-teal-500 py-2">
           <div className="overflow-hidden">
             <div className="whitespace-nowrap animate-marquee text-black text-sm text-center px-6">
